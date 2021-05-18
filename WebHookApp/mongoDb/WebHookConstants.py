@@ -5,3 +5,6 @@ class WebHookConstants(Enum):
     MESSAGE = "msg"
     NO_RECORDS_FOUND = "No records found for given data."
     SOFT_DELETE = "soft_delete"
+    ID = "_id"
+    UPDATE_EXPRESSION = "$set"
+    RECORD_DELETED = "Record is deleted successfully."

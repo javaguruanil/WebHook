@@ -1,7 +1,9 @@
+from bson import ObjectId
+
 from WebHookApp.mongoDb import WebHookUtil
 from WebHookApp.mongoDb.MongoDBConnector import getConnection
 from WebHookApp.mongoDb.WebHookConstants import WebHookConstants
-from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson
+from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDeleteJson
 
 
 def getVacanciesJson(data):
@@ -39,3 +41,20 @@ def fetchVacancies(data):
     except Exception as ex:
         print("Error occurred during the Vacancies fetching :: ", ex)
     return getJson(result)
+
+def deleteVacancies(id):
+    result = None
+    queryFilter = {WebHookConstants.ID.value: ObjectId(id)}
+    updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value
+                     :{WebHookConstants.SOFT_DELETE.value
+                       :WebHookConstants.SOFT_DEL_FLAG_YES.value,
+                       'update_date' : getCurrentDateTime()}}
+    try:
+        mongo = getConnection()
+        result = mongo.webHook_DEV \
+                      .VACANCIES \
+                      .update_one(queryFilter, updatingValue)
+        mongo.close()
+    except Exception as ex:
+        print("Error occurred during the Vacancies deleting :: ", ex)
+    return getDeleteJson(result)

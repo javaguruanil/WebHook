@@ -1,7 +1,9 @@
+from bson import ObjectId
+
 from WebHookApp.mongoDb import WebHookUtil
 from WebHookApp.mongoDb.MongoDBConnector import getConnection
 from WebHookApp.mongoDb.WebHookConstants import WebHookConstants
-from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson
+from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDeleteJson
 
 
 def getTrainingJson(data):
@@ -40,3 +42,20 @@ def fetchTraining(data):
     except Exception as ex:
         print("Error occurred during the Training fetching :: ", ex)
     return getJson(result)
+
+def deleteTraining(id):
+    result = None
+    queryFilter = {WebHookConstants.ID.value: ObjectId(id)}
+    updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value
+                     :{WebHookConstants.SOFT_DELETE.value
+                       :WebHookConstants.SOFT_DEL_FLAG_YES.value,
+                       'update_date' : getCurrentDateTime()}}
+    try:
+        mongo = getConnection()
+        result = mongo.webHook_DEV \
+                      .TRAINING \
+                      .update_one(queryFilter, updatingValue)
+        mongo.close()
+    except Exception as ex:
+        print("Error occurred during the Training deleting :: ", ex)
+    return getDeleteJson(result)

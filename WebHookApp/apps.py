@@ -1,13 +1,16 @@
 from flask import Flask, jsonify, request
 
-from WebHookApp.mongoDb.Accredited import saveAccredited, fetchAccredited
-from WebHookApp.mongoDb.Covid19EmployementPrgm import saveCovid19EmploymentPgm, fetchCovid19EmploymentPgm
-from WebHookApp.mongoDb.EducationCourseProviders import saveEducationCourseProviders, fetchEducationCourseProviders
-from WebHookApp.mongoDb.JobsSite import saveJobsSite, fetchJobsSite
-from WebHookApp.mongoDb.NonAccredited import saveNonAccredited, fetchNonAccredited
-from WebHookApp.mongoDb.OnlineLearningResource import saveOnlineLearnResources, fetchOnlineLearnResources
-from WebHookApp.mongoDb.Training import saveTraining, fetchTraining
-from WebHookApp.mongoDb.Vacancies import saveVacancies, fetchVacancies
+from WebHookApp.mongoDb.Accredited import saveAccredited, fetchAccredited, deleteAccredited
+from WebHookApp.mongoDb.Covid19EmployementPrgm import saveCovid19EmploymentPgm, fetchCovid19EmploymentPgm, \
+    deleteCovid19EmploymentPgm
+from WebHookApp.mongoDb.EducationCourseProviders import saveEducationCourseProviders, fetchEducationCourseProviders, \
+    deleteEducationCourseProviders
+from WebHookApp.mongoDb.JobsSite import saveJobsSite, fetchJobsSite, deleteJobsSite
+from WebHookApp.mongoDb.NonAccredited import saveNonAccredited, fetchNonAccredited, deleteNonAccredited
+from WebHookApp.mongoDb.OnlineLearningResource import saveOnlineLearnResources, fetchOnlineLearnResources, \
+    deleteOnlineLearnResources
+from WebHookApp.mongoDb.Training import saveTraining, fetchTraining, deleteTraining
+from WebHookApp.mongoDb.Vacancies import saveVacancies, fetchVacancies, deleteVacancies
 from lmiforall.apis import *
 
 import logging
@@ -77,9 +80,9 @@ def save_accredited() :
 def save_non_accredited() :
     return jsonify(saveNonAccredited(request.json))
 
-# ###### END :: Save operations #######
+###### END :: Save operations #######
 
-# ##### START :: GET operations ######
+##### START :: GET operations ######
 @app.route("/fetch/jobSites", methods = ["GET"])
 def fetch_job_sites() :
     return fetchJobsSite(request.args.to_dict())
@@ -111,75 +114,76 @@ def fetch_accredited() :
 @app.route("/fetch/nonAccredited", methods = ["GET"])
 def fetch_non_accredited() :
     return fetchNonAccredited(request.args.to_dict())
-# ##### END :: GET operations ######
+##### END :: GET operations ######
+
+
+##### START :: SOFT DELETE operations ######
+@app.route("/delete/jobSites/<id>", methods = ["DELETE"])
+def delete_job_sites(id) :
+    return deleteJobsSite(id)
+
+@app.route("/delete/edu/course/providers/<id>", methods = ["DELETE"])
+def delete_edu_course_providers(id) :
+    return deleteEducationCourseProviders(id)
+
+@app.route("/delete/online/learning/resources/<id>", methods = ["DELETE"])
+def delete_online_learning_resources(id) :
+    return deleteOnlineLearnResources(id)
+
+@app.route("/delete/covid19/employment/pgm/<id>", methods = ["DELETE"])
+def delete_covid19_employment_pgm(id) :
+    return deleteCovid19EmploymentPgm(id)
+
+@app.route("/delete/vacancies/<id>", methods = ["DELETE"])
+def delete_vacancies(id) :
+    return deleteVacancies(id)
+
+@app.route("/delete/training/<id>", methods = ["DELETE"])
+def delete_training(id) :
+    return deleteTraining(id)
+
+@app.route("/delete/accredited/<id>", methods = ["DELETE"])
+def delete_accredited(id) :
+    return deleteAccredited(id)
+
+@app.route("/delete/nonAccredited/<id>", methods = ["DELETE"])
+def delete_non_accredited(id) :
+    return deleteNonAccredited(id)
+##### END :: SOFT DELETE operations ######
+
 
 # TODO :: remaining implementation
-# ##### START :: SOFT DELETE operations ######
-# @app.route("/delete/jobSites", methods = ["DELETE"])
-# def save_job_sites() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/delete/edu/course/providers", methods = ["DELETE"])
-# def save_edu_course_providers() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/delete/online/learning/resources", methods = ["DELETE"])
-# def save_edu_course_providers() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/delete/covid19/employment/pgm", methods = ["DELETE"])
-# def save_job_sites() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/delete/vacancies", methods = ["DELETE"])
-# def save_job_sites() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/delete/training", methods = ["DELETE"])
-# def save_job_sites() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/delete/accredited", methods = ["DELETE"])
-# def save_job_sites() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/delete/nonAccredited", methods = ["DELETE"])
-# def save_job_sites() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-# ##### END :: SOFT DELETE operations ######
-#
-#
 # ##### START :: UPDATE operations ######
 # @app.route("/update/jobSites", methods = ["POST"])
-# def save_job_sites() :
+# def update_job_sites() :
 #     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
 #
 # @app.route("/update/edu/course/providers", methods = ["POST"])
-# def save_edu_course_providers() :
+# def update_edu_course_providers() :
 #     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
 #
 # @app.route("/update/online/learning/resources", methods = ["POST"])
-# def save_edu_course_providers() :
+# def update_online_learning_resources() :
 #     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
 #
 # @app.route("/update/covid19/employment/pgm", methods = ["POST"])
-# def save_job_sites() :
+# def update_covid19_employment_pgm() :
 #     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
 #
 # @app.route("/update/vacancies", methods = ["POST"])
-# def save_job_sites() :
+# def update_vacancies() :
 #     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
 #
 # @app.route("/update/training", methods = ["POST"])
-# def save_job_sites() :
+# def update_training() :
 #     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
 #
 # @app.route("/update/accredited", methods = ["POST"])
-# def save_job_sites() :
+# def update_accredited() :
 #     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
 #
 # @app.route("/update/nonAccredited", methods = ["POST"])
-# def save_job_sites() :
+# def update_non_accredited() :
 #     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
 # ##### END :: UPDATE operations ######
 #

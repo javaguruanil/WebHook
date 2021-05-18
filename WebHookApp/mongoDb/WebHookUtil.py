@@ -33,3 +33,10 @@ def appendSoftDeleteNo(data):
     """
     data[WebHookConstants.SOFT_DELETE.value] = WebHookConstants.SOFT_DEL_FLAG_NO.value
     return data
+
+
+def getDeleteJson(data):
+    if data is None:
+        return {WebHookConstants.MESSAGE.value: WebHookConstants.NO_RECORDS_FOUND.value}
+    else:
+        return {WebHookConstants.MESSAGE.value: WebHookConstants.RECORD_DELETED.value}
