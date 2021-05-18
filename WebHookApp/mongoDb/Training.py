@@ -1,6 +1,7 @@
+from WebHookApp.mongoDb import WebHookUtil
 from WebHookApp.mongoDb.MongoDBConnector import getConnection
 from WebHookApp.mongoDb.WebHookConstants import WebHookConstants
-from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime
+from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson
 
 
 def getTrainingJson(data):
@@ -26,4 +27,16 @@ def saveTraining(data):
         result = "Training Created"
     except Exception as ex:
         print("Error occurred during the Training insertion :: ", ex)
-    return result;
+    return result
+
+def fetchTraining(data):
+    result = None
+    try:
+        mongo = getConnection()
+        result = mongo.webHook_DEV \
+                      .TRAINING \
+                      .find_one(WebHookUtil.appendSoftDeleteNo(data))
+        mongo.close()
+    except Exception as ex:
+        print("Error occurred during the Training fetching :: ", ex)
+    return getJson(result)

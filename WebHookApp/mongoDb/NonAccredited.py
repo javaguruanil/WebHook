@@ -1,6 +1,7 @@
+from WebHookApp.mongoDb import WebHookUtil
 from WebHookApp.mongoDb.MongoDBConnector import getConnection
 from WebHookApp.mongoDb.WebHookConstants import WebHookConstants
-from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime
+from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson
 
 
 def getNonAccreditedJson(data):
@@ -26,4 +27,17 @@ def saveNonAccredited(data):
         result = "NonAccredited Created"
     except Exception as ex:
         print("Error occurred during the NonAccredited insertion :: ", ex)
-    return result;
+    return result
+
+def fetchNonAccredited(data):
+    result = None
+    try:
+        mongo = getConnection()
+        result = mongo.webHook_DEV \
+                      .NON_ACCREDITED \
+                      .find_one(WebHookUtil.appendSoftDeleteNo(data))
+        mongo.close()
+    except Exception as ex:
+        print("Error occurred during the NonAccredited fetching :: ", ex)
+    return getJson(result)
+

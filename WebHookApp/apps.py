@@ -1,13 +1,13 @@
 from flask import Flask, jsonify, request
 
-from WebHookApp.mongoDb.Accredited import saveAccredited
-from WebHookApp.mongoDb.Covid19EmployementPrgm import saveCovid19EmploymentPgm
-from WebHookApp.mongoDb.EducationCourseProviders import saveEducationCourseProviders
-from WebHookApp.mongoDb.JobsSite import saveJobsSite
-from WebHookApp.mongoDb.NonAccredited import saveNonAccredited
-from WebHookApp.mongoDb.OnlineLearningResource import saveOnlineLearnResources
-from WebHookApp.mongoDb.Training import saveTraining
-from WebHookApp.mongoDb.Vacancies import saveVacancies
+from WebHookApp.mongoDb.Accredited import saveAccredited, fetchAccredited
+from WebHookApp.mongoDb.Covid19EmployementPrgm import saveCovid19EmploymentPgm, fetchCovid19EmploymentPgm
+from WebHookApp.mongoDb.EducationCourseProviders import saveEducationCourseProviders, fetchEducationCourseProviders
+from WebHookApp.mongoDb.JobsSite import saveJobsSite, fetchJobsSite
+from WebHookApp.mongoDb.NonAccredited import saveNonAccredited, fetchNonAccredited
+from WebHookApp.mongoDb.OnlineLearningResource import saveOnlineLearnResources, fetchOnlineLearnResources
+from WebHookApp.mongoDb.Training import saveTraining, fetchTraining
+from WebHookApp.mongoDb.Vacancies import saveVacancies, fetchVacancies
 from lmiforall.apis import *
 
 import logging
@@ -79,43 +79,42 @@ def save_non_accredited() :
 
 # ###### END :: Save operations #######
 
+# ##### START :: GET operations ######
+@app.route("/fetch/jobSites", methods = ["GET"])
+def fetch_job_sites() :
+    return fetchJobsSite(request.args.to_dict())
+
+@app.route("/fetch/edu/course/providers", methods = ["GET"])
+def fetch_edu_course_providers() :
+    return fetchEducationCourseProviders(request.args.to_dict())
+
+@app.route("/fetch/online/learning/resources", methods = ["GET"])
+def fetch_online_learning_resources() :
+    return fetchOnlineLearnResources(request.args.to_dict())
+
+@app.route("/fetch/covid19/employment/pgm", methods = ["GET"])
+def fetch_covid19_employment_pgm() :
+    return fetchCovid19EmploymentPgm(request.args.to_dict())
+
+@app.route("/fetch/vacancies", methods = ["GET"])
+def fetch_vacancies() :
+    return fetchVacancies(request.args.to_dict())
+
+@app.route("/fetch/training", methods = ["GET"])
+def fetch_training() :
+    return fetchTraining(request.args.to_dict())
+
+@app.route("/fetch/accredited", methods = ["GET"])
+def fetch_accredited() :
+    return fetchAccredited(request.args.to_dict())
+
+@app.route("/fetch/nonAccredited", methods = ["GET"])
+def fetch_non_accredited() :
+    return fetchNonAccredited(request.args.to_dict())
+# ##### END :: GET operations ######
+
 # TODO :: remaining implementation
-# ##### START :: GET opertaions ######
-# @app.route("/fetch/jobSites", methods = ["GET"])
-# def save_job_sites() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/fetch/edu/course/providers", methods = ["GET"])
-# def save_edu_course_providers() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/fetch/online/learning/resources", methods = ["GET"])
-# def save_edu_course_providers() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/fetch/covid19/employment/pgm", methods = ["GET"])
-# def save_job_sites() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/fetch/vacancies", methods = ["GET"])
-# def save_job_sites() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/fetch/training", methods = ["GET"])
-# def save_job_sites() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/fetch/accredited", methods = ["GET"])
-# def save_job_sites() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/fetch/nonAccredited", methods = ["GET"])
-# def save_job_sites() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-# ##### END :: GET opertaions ######
-#
-#
-# ##### START :: SOFT DELETE opertaions ######
+# ##### START :: SOFT DELETE operations ######
 # @app.route("/delete/jobSites", methods = ["DELETE"])
 # def save_job_sites() :
 #     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
@@ -147,10 +146,10 @@ def save_non_accredited() :
 # @app.route("/delete/nonAccredited", methods = ["DELETE"])
 # def save_job_sites() :
 #     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-# ##### END :: SOFT DELETE opertaions ######
+# ##### END :: SOFT DELETE operations ######
 #
 #
-# ##### START :: UPDATE opertaions ######
+# ##### START :: UPDATE operations ######
 # @app.route("/update/jobSites", methods = ["POST"])
 # def save_job_sites() :
 #     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
@@ -182,7 +181,7 @@ def save_non_accredited() :
 # @app.route("/update/nonAccredited", methods = ["POST"])
 # def save_job_sites() :
 #     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-# ##### END :: UPDATE opertaions ######
+# ##### END :: UPDATE operations ######
 #
 ########################## END:: MONGODB CODE #########################################
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
+from WebHookApp.mongoDb import WebHookUtil
 from WebHookApp.mongoDb.MongoDBConnector import getConnection
 from WebHookApp.mongoDb.WebHookConstants import WebHookConstants
-from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime
+from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson
 
 
 def getEduCourseProvidersJson(data):
@@ -26,4 +27,16 @@ def saveEducationCourseProviders(data):
         result = "EducationCourseProviders Created"
     except Exception as ex:
         print("Error occurred during the EducationCourseProviders insertion :: ", ex)
-    return result;
+    return result
+
+def fetchEducationCourseProviders(data):
+    result = None
+    try:
+        mongo = getConnection()
+        result = mongo.webHook_DEV \
+                      .EDU_COURSE_PROVIDERS \
+                      .find_one(WebHookUtil.appendSoftDeleteNo(data))
+        mongo.close()
+    except Exception as ex:
+        print("Error occurred during the EducationCourseProviders fetching :: ", ex)
+    return getJson(result)

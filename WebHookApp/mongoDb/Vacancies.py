@@ -1,6 +1,7 @@
+from WebHookApp.mongoDb import WebHookUtil
 from WebHookApp.mongoDb.MongoDBConnector import getConnection
 from WebHookApp.mongoDb.WebHookConstants import WebHookConstants
-from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime
+from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson
 
 
 def getVacanciesJson(data):
@@ -25,4 +26,16 @@ def saveVacancies(data):
         result = "Vacancies Created"
     except Exception as ex:
         print("Error occurred during the Vacancies insertion :: ", ex)
-    return result;
+    return result
+
+def fetchVacancies(data):
+    result = None
+    try:
+        mongo = getConnection()
+        result = mongo.webHook_DEV \
+                      .VACANCIES \
+                      .find_one(WebHookUtil.appendSoftDeleteNo(data))
+        mongo.close()
+    except Exception as ex:
+        print("Error occurred during the Vacancies fetching :: ", ex)
+    return getJson(result)

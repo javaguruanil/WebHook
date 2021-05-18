@@ -1,6 +1,7 @@
+from WebHookApp.mongoDb import WebHookUtil
 from WebHookApp.mongoDb.MongoDBConnector import getConnection
 from WebHookApp.mongoDb.WebHookConstants import WebHookConstants
-from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime
+from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson
 
 
 def getJobsSiteJson(data):
@@ -24,4 +25,16 @@ def saveJobsSite(data):
         result = "JobsSite Created"
     except Exception as ex:
         print("Error occurred during the JobsSite insertion :: ", ex)
-    return result;
+    return result
+
+def fetchJobsSite(data):
+    result = None
+    try:
+        mongo = getConnection()
+        result = mongo.webHook_DEV \
+                      .JOBS_SITE \
+                      .find_one(WebHookUtil.appendSoftDeleteNo(data))
+        mongo.close()
+    except Exception as ex:
+        print("Error occurred during the JobsSite fetching :: ", ex)
+    return getJson(result)
