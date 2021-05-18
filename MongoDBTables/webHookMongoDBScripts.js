@@ -8,7 +8,7 @@ db.TRAINING.drop()
 db.ACCREDITED.drop()
 db.NON_ACCREDITED.drop()
 db.createCollection("JOBS_SITE", {autoIndexId:true}); 
-db.createCollection("EDU_COURSE_PRODIVERS", {autoIndexId:true});
+db.createCollection("EDU_COURSE_PROVIDERS", {autoIndexId:true});
 db.createCollection("ONLINE_LEARN_RESOURCES", {autoIndexId:true});
 db.createCollection("COVID19_EMPLOYMENT_PRGM", {autoIndexId:true});
 db.createCollection("VACANCIES", {autoIndexId:true});

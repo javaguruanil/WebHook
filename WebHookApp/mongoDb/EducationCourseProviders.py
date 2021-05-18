@@ -20,7 +20,7 @@ def saveEducationCourseProviders(data):
         mongo = getConnection()
         # TODO - Need to set configurations for DEV, QA, PERF, ACCEPTANCE envs
         mongo.webHook_DEV\
-             .EDU_COURSE_PRODIVERS\
+             .EDU_COURSE_PROVIDERS\
              .insert_one(getEduCourseProvidersJson(data))
         mongo.close()
         result = "EducationCourseProviders Created"
