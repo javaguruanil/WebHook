@@ -1,16 +1,17 @@
 from flask import Flask, jsonify, request
 
-from WebHookApp.mongoDb.Accredited import saveAccredited, fetchAccredited, deleteAccredited
+from WebHookApp.mongoDb.Accredited import saveAccredited, fetchAccredited, deleteAccredited, updateAccredited
 from WebHookApp.mongoDb.Covid19EmployementPrgm import saveCovid19EmploymentPgm, fetchCovid19EmploymentPgm, \
-    deleteCovid19EmploymentPgm
+    deleteCovid19EmploymentPgm, updateCovid19EmploymentPgm
 from WebHookApp.mongoDb.EducationCourseProviders import saveEducationCourseProviders, fetchEducationCourseProviders, \
-    deleteEducationCourseProviders
-from WebHookApp.mongoDb.JobsSite import saveJobsSite, fetchJobsSite, deleteJobsSite
-from WebHookApp.mongoDb.NonAccredited import saveNonAccredited, fetchNonAccredited, deleteNonAccredited
+    deleteEducationCourseProviders, updateEducationCourseProviders
+from WebHookApp.mongoDb.JobsSite import saveJobsSite, fetchJobsSite, deleteJobsSite, updateJobsSite
+from WebHookApp.mongoDb.NonAccredited import saveNonAccredited, fetchNonAccredited, deleteNonAccredited, \
+    updateNonAccredited
 from WebHookApp.mongoDb.OnlineLearningResource import saveOnlineLearnResources, fetchOnlineLearnResources, \
-    deleteOnlineLearnResources
-from WebHookApp.mongoDb.Training import saveTraining, fetchTraining, deleteTraining
-from WebHookApp.mongoDb.Vacancies import saveVacancies, fetchVacancies, deleteVacancies
+    deleteOnlineLearnResources, updateOnlineLearnResources
+from WebHookApp.mongoDb.Training import saveTraining, fetchTraining, deleteTraining, updateTraining
+from WebHookApp.mongoDb.Vacancies import saveVacancies, fetchVacancies, deleteVacancies, updateVacancies
 from lmiforall.apis import *
 
 import logging
@@ -151,42 +152,40 @@ def delete_non_accredited(id) :
     return deleteNonAccredited(id)
 ##### END :: SOFT DELETE operations ######
 
+##### START :: UPDATE operations ######
+@app.route("/update/jobSites", methods = ["POST"])
+def update_job_sites() :
+    return updateJobsSite(request.json)
 
-# TODO :: remaining implementation
-# ##### START :: UPDATE operations ######
-# @app.route("/update/jobSites", methods = ["POST"])
-# def update_job_sites() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/update/edu/course/providers", methods = ["POST"])
-# def update_edu_course_providers() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/update/online/learning/resources", methods = ["POST"])
-# def update_online_learning_resources() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/update/covid19/employment/pgm", methods = ["POST"])
-# def update_covid19_employment_pgm() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/update/vacancies", methods = ["POST"])
-# def update_vacancies() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/update/training", methods = ["POST"])
-# def update_training() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/update/accredited", methods = ["POST"])
-# def update_accredited() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-#
-# @app.route("/update/nonAccredited", methods = ["POST"])
-# def update_non_accredited() :
-#     return "<h1>Hello welcome Raju Mohandu Anil ************* </h1>"
-# ##### END :: UPDATE operations ######
-#
+@app.route("/update/edu/course/providers", methods = ["POST"])
+def update_edu_course_providers() :
+    return updateEducationCourseProviders(request.json)
+
+@app.route("/update/online/learning/resources", methods = ["POST"])
+def update_online_learning_resources() :
+    return updateOnlineLearnResources(request.json)
+
+@app.route("/update/covid19/employment/pgm", methods = ["POST"])
+def update_covid19_employment_pgm() :
+    return updateCovid19EmploymentPgm(request.json)
+
+@app.route("/update/vacancies", methods = ["POST"])
+def update_vacancies() :
+    return updateVacancies(request.json)
+
+@app.route("/update/training", methods = ["POST"])
+def update_training() :
+    return updateTraining(request.json)
+
+@app.route("/update/accredited", methods = ["POST"])
+def update_accredited() :
+    return updateAccredited(request.json)
+
+@app.route("/update/nonAccredited", methods = ["POST"])
+def update_non_accredited() :
+    return updateNonAccredited(request.json)
+##### END :: UPDATE operations ######
+
 ########################## END:: MONGODB CODE #########################################
 if __name__ == "__main__":
     app.run()

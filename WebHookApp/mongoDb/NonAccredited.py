@@ -3,7 +3,7 @@ from bson import ObjectId
 from WebHookApp.mongoDb import WebHookUtil
 from WebHookApp.mongoDb.MongoDBConnector import getConnection
 from WebHookApp.mongoDb.WebHookConstants import WebHookConstants
-from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDeleteJson
+from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDeleteJson, getUpdateJson
 
 
 def getNonAccreditedJson(data):
@@ -37,7 +37,7 @@ def fetchNonAccredited(data):
         mongo = getConnection()
         result = mongo.webHook_DEV \
                       .NON_ACCREDITED \
-                      .find_one(WebHookUtil.appendSoftDeleteNo(data))
+                      .find_one(WebHookUtil.appendSoftDeleteNoAndObjectId(data))
         mongo.close()
     except Exception as ex:
         print("Error occurred during the NonAccredited fetching :: ", ex)
@@ -60,3 +60,19 @@ def deleteNonAccredited(id):
         print("Error occurred during the NonAccredited deleting :: ", ex)
     return getDeleteJson(result)
 
+def updateNonAccredited(data):
+    result = None
+    queryFilter = {WebHookConstants.ID.value:
+                       ObjectId(data[WebHookConstants.ID.value][WebHookConstants.OBJECT_ID.value])}
+    data['update_date'] = getCurrentDateTime()
+    del data[WebHookConstants.ID.value]
+    updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value: data}
+    try:
+        mongo = getConnection()
+        result = mongo.webHook_DEV \
+                      .NON_ACCREDITED \
+                      .update_one(queryFilter, updatingValue)
+        mongo.close()
+    except Exception as ex:
+        print("Error occurred during the NonAccredited updating :: ", ex)
+    return getUpdateJson(result, WebHookConstants.NO_RECORDS_UPDATED.value)
