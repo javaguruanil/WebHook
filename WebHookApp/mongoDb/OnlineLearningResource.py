@@ -8,15 +8,15 @@ from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDelet
 
 def getOnlineLearnResources(data):
     return {
-        'skill_types' : data['skill_types'],
-        'corresponding_online_links' : data['corresponding_online_links'],
-        'create_date' : getCurrentDateTime(),
-        'update_date' : getCurrentDateTime(),
-        'soft_delete' : WebHookConstants.SOFT_DEL_FLAG_NO.value
+            WebHookConstants.SKILL_TYPES.value : data[WebHookConstants.SKILL_TYPES.value],
+            WebHookConstants.CORRESPONDING_ONLINE_LINKS.value : data[WebHookConstants.CORRESPONDING_ONLINE_LINKS.value],
+            WebHookConstants.CREATE_DATE.value : getCurrentDateTime(),
+            WebHookConstants.UPDATE_DATE.value : getCurrentDateTime(),
+            WebHookConstants.SOFT_DELETE.value : WebHookConstants.SOFT_DEL_FLAG_NO.value
     }
 
 def saveOnlineLearnResources(data):
-    result = "OnlineLearnResources data not inserted."
+    result = WebHookConstants.ONLINE_LEARN_RESOURCES_DATA_NOT_CREATED.value
     try:
         mongo = getConnection()
         # TODO - Need to set configurations for DEV, QA, PERF, ACCEPTANCE envs
@@ -24,7 +24,7 @@ def saveOnlineLearnResources(data):
              .ONLINE_LEARN_RESOURCES \
              .insert_one(getOnlineLearnResources(data))
         mongo.close()
-        result = "OnlineLearnResources Created"
+        result = WebHookConstants.ONLINE_LEARN_RESOURCES_DATA_CREATED.value
     except Exception as ex:
         print("Error occurred during the OnlineLearnResources insertion :: ", ex)
     return result
@@ -47,7 +47,7 @@ def deleteOnlineLearnResources(id):
     updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value
                      :{WebHookConstants.SOFT_DELETE.value
                        :WebHookConstants.SOFT_DEL_FLAG_YES.value,
-                       'update_date' : getCurrentDateTime()}}
+                         WebHookConstants.UPDATE_DATE.value : getCurrentDateTime()}}
     try:
         mongo = getConnection()
         result = mongo.webHook_DEV \
@@ -63,7 +63,7 @@ def updateOnlineLearnResources(data):
     result = None
     queryFilter = {WebHookConstants.ID.value:
                    ObjectId(data[WebHookConstants.ID.value][WebHookConstants.OBJECT_ID.value])}
-    data['update_date'] = getCurrentDateTime()
+    data[WebHookConstants.UPDATE_DATE.value] = getCurrentDateTime()
     del data[WebHookConstants.ID.value]
     updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value: data}
     try:

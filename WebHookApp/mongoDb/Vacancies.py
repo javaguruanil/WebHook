@@ -8,16 +8,16 @@ from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDelet
 
 def getVacanciesJson(data):
     return {
-        'skill_type' : data['skill_type'],
-        'career_options_for_skills' : data['career_options_for_skills'],
-        'further_info' : data['further_info'],
-        'create_date' : getCurrentDateTime(),
-        'update_date' : getCurrentDateTime(),
-        'soft_delete' : WebHookConstants.SOFT_DEL_FLAG_NO.value
+        WebHookConstants.SKILL_TYPE.value : data[WebHookConstants.SKILL_TYPE.value],
+        WebHookConstants.CAREER_OPTIONS_FOR_SKILLS.value : data[WebHookConstants.CAREER_OPTIONS_FOR_SKILLS.value],
+        WebHookConstants.FURTHER_INFO.value : data[WebHookConstants.FURTHER_INFO.value],
+        WebHookConstants.CREATE_DATE.value : getCurrentDateTime(),
+        WebHookConstants.UPDATE_DATE.value : getCurrentDateTime(),
+        WebHookConstants.SOFT_DELETE.value : WebHookConstants.SOFT_DEL_FLAG_NO.value
     }
 
 def saveVacancies(data):
-    result = "Vacancies data not inserted."
+    result = WebHookConstants.VACANCIES_DATA_NOT_CREATED.value
     try:
         mongo = getConnection()
         # TODO - Need to set configurations for DEV, QA, PERF, ACCEPTANCE envs
@@ -25,7 +25,7 @@ def saveVacancies(data):
              .VACANCIES \
              .insert_one(getVacanciesJson(data))
         mongo.close()
-        result = "Vacancies Created"
+        result = WebHookConstants.VACANCIES_DATA_CREATED.value
     except Exception as ex:
         print("Error occurred during the Vacancies insertion :: ", ex)
     return result
@@ -48,7 +48,7 @@ def deleteVacancies(id):
     updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value
                      :{WebHookConstants.SOFT_DELETE.value
                        :WebHookConstants.SOFT_DEL_FLAG_YES.value,
-                       'update_date' : getCurrentDateTime()}}
+                         WebHookConstants.UPDATE_DATE.value : getCurrentDateTime()}}
     try:
         mongo = getConnection()
         result = mongo.webHook_DEV \
@@ -63,7 +63,7 @@ def updateVacancies(data):
     result = None
     queryFilter = {WebHookConstants.ID.value:
                    ObjectId(data[WebHookConstants.ID.value][WebHookConstants.OBJECT_ID.value])}
-    data['update_date'] = getCurrentDateTime()
+    data[WebHookConstants.UPDATE_DATE.value] = getCurrentDateTime()
     del data[WebHookConstants.ID.value]
     updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value: data}
     try:

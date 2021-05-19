@@ -9,15 +9,15 @@ from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDelet
 #TODO - Need to move constants to enum.
 def getJobsSiteJson(data):
     return {
-             'job_category' : data['job_category'],
-             'corresponding_job_site' : data['corresponding_job_site'],
-             'create_date' : getCurrentDateTime(),
-             'update_date' : getCurrentDateTime(),
-             'soft_delete' : WebHookConstants.SOFT_DEL_FLAG_NO.value
-           }
+            WebHookConstants.JOB_CATEGORY.value : data[WebHookConstants.JOB_CATEGORY.value],
+            WebHookConstants.CORRESPONDING_JOB_SITE.value : data[WebHookConstants.CORRESPONDING_JOB_SITE.value],
+            WebHookConstants.CREATE_DATE.value : getCurrentDateTime(),
+            WebHookConstants.UPDATE_DATE.value : getCurrentDateTime(),
+            WebHookConstants.SOFT_DELETE.value : WebHookConstants.SOFT_DEL_FLAG_NO.value
+    }
 
 def saveJobsSite(data):
-    result = "JobsSite data not inserted."
+    result = WebHookConstants.JOBS_SITE_DATA_NOT_CREATED.value
     try:
         mongo = getConnection()
         # TODO - Need to set configurations for DEV, QA, PERF, ACCEPTANCE envs
@@ -25,7 +25,7 @@ def saveJobsSite(data):
              .JOBS_SITE\
              .insert_one(getJobsSiteJson(data))
         mongo.close()
-        result = "JobsSite Created"
+        result = WebHookConstants.JOBS_SITE_DATA_CREATED.value
     except Exception as ex:
         print("Error occurred during the JobsSite insertion :: ", ex)
     return result
@@ -49,7 +49,7 @@ def deleteJobsSite(id):
     updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value
                      :{WebHookConstants.SOFT_DELETE.value
                        :WebHookConstants.SOFT_DEL_FLAG_YES.value,
-                       'update_date' : getCurrentDateTime()}}
+                         WebHookConstants.UPDATE_DATE.value : getCurrentDateTime()}}
     try:
         mongo = getConnection()
         result = mongo.webHook_DEV \
@@ -64,7 +64,7 @@ def updateJobsSite(data):
     result = None
     queryFilter = {WebHookConstants.ID.value:
                    ObjectId(data[WebHookConstants.ID.value][WebHookConstants.OBJECT_ID.value])}
-    data['update_date'] = getCurrentDateTime()
+    data[WebHookConstants.UPDATE_DATE.value] = getCurrentDateTime()
     del data[WebHookConstants.ID.value]
     updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value: data}
     try:

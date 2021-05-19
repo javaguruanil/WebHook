@@ -8,17 +8,17 @@ from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDelet
 
 def getNonAccreditedJson(data):
     return {
-        'borough' : data['borough'],
-        'subject' : data['subject'],
-        'possible_options' : data['possible_options'],
-        'where_to_find_more' : data['where_to_find_more'],
-        'create_date' : getCurrentDateTime(),
-        'update_date' : getCurrentDateTime(),
-        'soft_delete' : WebHookConstants.SOFT_DEL_FLAG_NO.value
+            WebHookConstants.BOROUGH.value : data[WebHookConstants.BOROUGH.value],
+            WebHookConstants.SUBJECT.value : data[WebHookConstants.SUBJECT.value],
+            WebHookConstants.POSSIBLE_OPTIONS.value : data[WebHookConstants.POSSIBLE_OPTIONS.value],
+            WebHookConstants.WHERE_TO_FIND_MORE.value : data[WebHookConstants.WHERE_TO_FIND_MORE.value],
+            WebHookConstants.CREATE_DATE.value : getCurrentDateTime(),
+            WebHookConstants.UPDATE_DATE.value : getCurrentDateTime(),
+            WebHookConstants.SOFT_DELETE.value : WebHookConstants.SOFT_DEL_FLAG_NO.value
     }
 
 def saveNonAccredited(data):
-    result = "NonAccredited data not inserted."
+    result = WebHookConstants.NON_ACCREDITED_DATA_NOT_CREATED.value
     try:
         mongo = getConnection()
         # TODO - Need to set configurations for DEV, QA, PERF, ACCEPTANCE envs
@@ -26,7 +26,7 @@ def saveNonAccredited(data):
              .NON_ACCREDITED \
              .insert_one(getNonAccreditedJson(data))
         mongo.close()
-        result = "NonAccredited Created"
+        result = WebHookConstants.NON_ACCREDITED_DATA_CREATED.value
     except Exception as ex:
         print("Error occurred during the NonAccredited insertion :: ", ex)
     return result
@@ -49,7 +49,7 @@ def deleteNonAccredited(id):
     updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value
                      :{WebHookConstants.SOFT_DELETE.value
                        :WebHookConstants.SOFT_DEL_FLAG_YES.value,
-                       'update_date' : getCurrentDateTime()}}
+                         WebHookConstants.UPDATE_DATE.value : getCurrentDateTime()}}
     try:
         mongo = getConnection()
         result = mongo.webHook_DEV \
@@ -64,7 +64,7 @@ def updateNonAccredited(data):
     result = None
     queryFilter = {WebHookConstants.ID.value:
                        ObjectId(data[WebHookConstants.ID.value][WebHookConstants.OBJECT_ID.value])}
-    data['update_date'] = getCurrentDateTime()
+    data[WebHookConstants.UPDATE_DATE.value] = getCurrentDateTime()
     del data[WebHookConstants.ID.value]
     updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value: data}
     try:

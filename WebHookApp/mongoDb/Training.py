@@ -8,17 +8,17 @@ from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDelet
 
 def getTrainingJson(data):
     return {
-        'borough' : data['borough'],
-        'sector_or_job_type' : data['sector_or_job_type'],
-        'training_option' : data['training_option'],
-        'where_to_find_more' : data['where_to_find_more'],
-        'create_date' : getCurrentDateTime(),
-        'update_date' : getCurrentDateTime(),
-        'soft_delete' : WebHookConstants.SOFT_DEL_FLAG_NO.value
+        WebHookConstants.BOROUGH.value : data[WebHookConstants.BOROUGH.value],
+        WebHookConstants.SECTOR_OR_JOB_TYPE.value : data[WebHookConstants.SECTOR_OR_JOB_TYPE.value],
+        WebHookConstants.TRAINING_OPTION.value : data[WebHookConstants.TRAINING_OPTION.value],
+        WebHookConstants.WHERE_TO_FIND_MORE.value : data[WebHookConstants.WHERE_TO_FIND_MORE.value],
+        WebHookConstants.CREATE_DATE.value : getCurrentDateTime(),
+        WebHookConstants.UPDATE_DATE.value : getCurrentDateTime(),
+        WebHookConstants.SOFT_DELETE.value : WebHookConstants.SOFT_DEL_FLAG_NO.value
     }
 
 def saveTraining(data):
-    result = "Training data not inserted."
+    result = WebHookConstants.TRAINING_DATA_NOT_CREATED.value
     try:
         mongo = getConnection()
         # TODO - Need to set configurations for DEV, QA, PERF, ACCEPTANCE envs
@@ -26,7 +26,7 @@ def saveTraining(data):
              .TRAINING \
              .insert_one(getTrainingJson(data))
         mongo.close()
-        result = "Training Created"
+        result = WebHookConstants.TRAINING_DATA_CREATED.value
     except Exception as ex:
         print("Error occurred during the Training insertion :: ", ex)
     return result
@@ -49,7 +49,7 @@ def deleteTraining(id):
     updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value
                      :{WebHookConstants.SOFT_DELETE.value
                        :WebHookConstants.SOFT_DEL_FLAG_YES.value,
-                       'update_date' : getCurrentDateTime()}}
+                         WebHookConstants.UPDATE_DATE.value : getCurrentDateTime()}}
     try:
         mongo = getConnection()
         result = mongo.webHook_DEV \
@@ -64,7 +64,7 @@ def updateTraining(data):
     result = None
     queryFilter = {WebHookConstants.ID.value:
                        ObjectId(data[WebHookConstants.ID.value][WebHookConstants.OBJECT_ID.value])}
-    data['update_date'] = getCurrentDateTime()
+    data[WebHookConstants.UPDATE_DATE.value] = getCurrentDateTime()
     del data[WebHookConstants.ID.value]
     updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value: data}
     try:

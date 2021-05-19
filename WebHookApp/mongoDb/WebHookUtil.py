@@ -52,7 +52,7 @@ def getUpdateJson(data, message):
     :param message: string
     :param data: json string
     """
-    if data is None:
+    if data is None or (data is not None and data.modified_count == 0):
         return {WebHookConstants.MESSAGE.value: message}
     else:
         return {WebHookConstants.MESSAGE.value: WebHookConstants.RECORDS_UPDATED.value}
