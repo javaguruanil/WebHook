@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="http://localhost:5000/save/jobSites" method = "POST">
+    JobCategory: <input type = text name="job_category"> <br>
+    CorrespondingJobSite: <input type = text name="corresponding_job_site"> <br>
+    <input type = "submit" value = "SAVE"/>
+</form>
+<a href="{{ url_for('index') }}">Click for Index</a>
+</body>
+</html>

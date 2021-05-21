@@ -40,12 +40,20 @@ def appendObjectId(data):
         data[WebHookConstants.ID.value] = ObjectId(data[WebHookConstants.ID.value])
     return data
 
+#TODO - Need to clean up this code later
 def getDeleteJson(data):
     if data is None:
         return {WebHookConstants.MESSAGE.value: WebHookConstants.NO_RECORDS_FOUND.value}
     else:
         return {WebHookConstants.MESSAGE.value: WebHookConstants.RECORD_DELETED.value}
 
+def getDeleteMessage(data):
+    if data is None or (data is not None and data.modified_count == 0):
+        return WebHookConstants.NO_RECORDS_FOUND.value
+    else:
+        return WebHookConstants.RECORD_DELETED.value
+
+#TODO - Need to clean up this code later
 def getUpdateJson(data, message):
     """
     This function serializes ObjectId which is non-serialized.
@@ -56,3 +64,14 @@ def getUpdateJson(data, message):
         return {WebHookConstants.MESSAGE.value: message}
     else:
         return {WebHookConstants.MESSAGE.value: WebHookConstants.RECORDS_UPDATED.value}
+
+def getUpdateMessage(data, message):
+    """
+    This function serializes ObjectId which is non-serialized.
+    :param message: string
+    :param data: json string
+    """
+    if data is None or (data is not None and data.modified_count == 0):
+        return message
+    else:
+        return WebHookConstants.RECORDS_UPDATED.value

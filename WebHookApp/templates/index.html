@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<link href="../direct1.html" rel="import" />
+
+{{msg}}
+<br>
+<table border = 1>
+    <tr>
+        <th>JobsSite</th>
+    </tr>
+    <tr>
+        <td>
+            <form action="http://localhost:5000/render/jobsSite/save" method = "GET">
+                <input type = "submit" value = "SAVE"/>
+            </form>
+        </td>
+        <td>
+            <form action="http://localhost:5000/render/jobsSite/fetch" method = "GET">
+                <input type = "submit" value = "FETCH"/>
+            </form>
+        </td>
+        <td>
+            <form action="http://localhost:5000/render/jobsSite/udpate" method = "GET">
+                <input type = "submit" value = "UPDATE"/>
+            </form>
+        </td>
+        <td>
+            <form action="http://localhost:5000/render/jobsSite/delete" method = "GET">
+                <input type = "submit" value = "DELETE"/>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+</html>

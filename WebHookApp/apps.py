@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, make_response
 
 from WebHookApp.mongoDb.Accredited import saveAccredited, fetchAccredited, deleteAccredited, updateAccredited
 from WebHookApp.mongoDb.Covid19EmployementPrgm import saveCovid19EmploymentPgm, fetchCovid19EmploymentPgm, \
@@ -24,6 +24,26 @@ logging.basicConfig(filename='webhook.log', level=logging.DEBUG, format=f'[%(asc
 def hello():
     app.logger.debug("LOGS")
     return "Hello World!"
+
+@app.route("/index")
+def index():
+    return render_template("index.html")
+
+@app.route("/render/jobsSite/save")
+def jobsSiteSavePage():
+    return render_template("jobsSiteSave.html")
+
+@app.route("/render/jobsSite/fetch")
+def jobsSiteFetchPage():
+    return render_template("jobsSiteFetch.html")
+
+@app.route("/render/jobsSite/udpate")
+def jobsSiteUpdatePage():
+    return render_template("jobsSiteUpdate.html")
+
+@app.route("/render/jobsSite/delete")
+def jobsSiteDeletePage():
+    return render_template("jobsSiteDelete.html")
 
 @app.route("/vacancies")
 def get_vacancies():
@@ -51,7 +71,7 @@ def get_courses():
 ###### START :: Save operations #######
 @app.route("/save/jobSites", methods = ["POST"])
 def save_job_sites() :
-    return jsonify(saveJobsSite(request.json))
+    return render_template("index.html", msg=saveJobsSite(request.form.to_dict()))
 
 @app.route("/save/edu/course/providers", methods = ["POST"])
 def save_edu_course_providers() :
@@ -86,7 +106,7 @@ def save_non_accredited() :
 ##### START :: GET operations ######
 @app.route("/fetch/jobSites", methods = ["GET"])
 def fetch_job_sites() :
-    return fetchJobsSite(request.args.to_dict())
+    return render_template("fetchDisplayPage.html", msg=fetchJobsSite(request.args.to_dict()))
 
 @app.route("/fetch/edu/course/providers", methods = ["GET"])
 def fetch_edu_course_providers() :
@@ -119,9 +139,9 @@ def fetch_non_accredited() :
 
 
 ##### START :: SOFT DELETE operations ######
-@app.route("/delete/jobSites/<id>", methods = ["DELETE"])
-def delete_job_sites(id) :
-    return deleteJobsSite(id)
+@app.route("/delete/jobSites", methods = ["GET"])
+def delete_job_sites() :
+    return render_template("index.html",msg=deleteJobsSite(request.args.get("_id")))
 
 @app.route("/delete/edu/course/providers/<id>", methods = ["DELETE"])
 def delete_edu_course_providers(id) :
@@ -155,7 +175,7 @@ def delete_non_accredited(id) :
 ##### START :: UPDATE operations ######
 @app.route("/update/jobSites", methods = ["POST"])
 def update_job_sites() :
-    return updateJobsSite(request.json)
+    return render_template("index.html",msg=updateJobsSite(request.form.to_dict()))
 
 @app.route("/update/edu/course/providers", methods = ["POST"])
 def update_edu_course_providers() :

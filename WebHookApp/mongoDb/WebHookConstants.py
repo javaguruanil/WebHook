@@ -62,5 +62,7 @@ class WebHookConstants(Enum):
     VACANCIES_DATA_NOT_CREATED = "Vacancies data not created."
     VACANCIES_DATA_CREATED = "Vacancies data created."
 
+    HYPHEN = "-"
+
 
 
