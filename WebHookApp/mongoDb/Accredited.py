@@ -3,7 +3,9 @@ from bson import ObjectId
 from WebHookApp.mongoDb import WebHookUtil
 from WebHookApp.mongoDb.MongoDBConnector import getConnection
 from WebHookApp.mongoDb.WebHookConstants import WebHookConstants
-from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDeleteJson, getUpdateJson
+from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDeleteJson, getUpdateJson, getDeleteMessage, \
+    getUpdateMessage
+from WebHookApp.response.AccreditedFetch import AccreditedFetch
 
 
 def getAccreditedJson(data):
@@ -22,11 +24,11 @@ def saveAccredited(data):
     try:
         mongo = getConnection()
         # TODO - Need to set configurations for DEV, QA, PERF, ACCEPTANCE envs
-        mongo.webHook_DEV \
-             .ACCREDITED \
-             .insert_one(getAccreditedJson(data))
+        result = mongo.webHook_DEV \
+                      .ACCREDITED \
+                      .insert_one(getAccreditedJson(data))
         mongo.close()
-        result = WebHookConstants.ACCREDITED_DATA_CREATED.value
+        result = str(result.inserted_id)+WebHookConstants.HYPHEN.value+WebHookConstants.ACCREDITED_DATA_CREATED.value
     except Exception as ex:
         print("Error occurred during the Accredited insertion :: ", ex)
     return result
@@ -41,7 +43,12 @@ def fetchAccredited(data):
         mongo.close()
     except Exception as ex:
         print("Error occurred during the Accredited fetching :: ", ex)
-    return getJson(result)
+    if result is None:
+        return WebHookConstants.NO_RECORDS_FOUND.value
+    else:
+        resp = getJson(result)
+        resp[WebHookConstants.ID.value] = resp[WebHookConstants.ID.value][WebHookConstants.OBJECT_ID.value]
+        return AccreditedFetch(**resp)
 
 def deleteAccredited(id):
     result = None
@@ -58,12 +65,11 @@ def deleteAccredited(id):
         mongo.close()
     except Exception as ex:
         print("Error occurred during the Accredited deleting :: ", ex)
-    return getDeleteJson(result)
+    return getDeleteMessage(result)
 
 def updateAccredited(data):
     result = None
-    queryFilter = {WebHookConstants.ID.value:
-                   ObjectId(data[WebHookConstants.ID.value][WebHookConstants.OBJECT_ID.value])}
+    queryFilter = {WebHookConstants.ID.value:ObjectId(data[WebHookConstants.ID.value])}
     data[WebHookConstants.UPDATE_DATE.value] = getCurrentDateTime()
     del data[WebHookConstants.ID.value]
     updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value: data}
@@ -75,4 +81,4 @@ def updateAccredited(data):
         mongo.close()
     except Exception as ex:
         print("Error occurred during the Accredited updating :: ", ex)
-    return getUpdateJson(result, WebHookConstants.NO_RECORDS_UPDATED.value)
+    return getUpdateMessage(result, WebHookConstants.NO_RECORDS_UPDATED.value)

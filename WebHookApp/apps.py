@@ -29,22 +29,6 @@ def hello():
 def index():
     return render_template("index.html")
 
-@app.route("/render/jobsSite/save")
-def jobsSiteSavePage():
-    return render_template("jobsSiteSave.html")
-
-@app.route("/render/jobsSite/fetch")
-def jobsSiteFetchPage():
-    return render_template("jobsSiteFetch.html")
-
-@app.route("/render/jobsSite/udpate")
-def jobsSiteUpdatePage():
-    return render_template("jobsSiteUpdate.html")
-
-@app.route("/render/jobsSite/delete")
-def jobsSiteDeletePage():
-    return render_template("jobsSiteDelete.html")
-
 @app.route("/vacancies")
 def get_vacancies():
     keywords = request.args.get('keywords', None)
@@ -66,6 +50,38 @@ def get_courses():
 
     return jsonify(Courses.get_courses(subject, postcode))
 
+@app.route("/render/jobsSite/save")
+def jobsSiteSavePage():
+    return render_template("jobsSiteSave.html")
+
+@app.route("/render/jobsSite/fetch")
+def jobsSiteFetchPage():
+    return render_template("jobsSiteFetch.html")
+
+@app.route("/render/jobsSite/udpate")
+def jobsSiteUpdatePage():
+    return render_template("jobsSiteUpdate.html")
+
+@app.route("/render/jobsSite/delete")
+def jobsSiteDeletePage():
+    return render_template("jobsSiteDelete.html")
+
+######################## Accredited ######################################
+@app.route("/render/accredited/save")
+def accreditedSavePage():
+    return render_template("accreditedSave.html")
+
+@app.route("/render/accredited/fetch")
+def accreditedFetchPage():
+    return render_template("accreditedFetch.html")
+
+@app.route("/render/accredited/udpate")
+def accreditedUpdatePage():
+    return render_template("accreditedUpdate.html")
+
+@app.route("/render/accredited/delete")
+def accreditedDeletePage():
+    return render_template("accreditedDelete.html")
 
 ####################### START:: MONGODB CODE ############################################
 ###### START :: Save operations #######
@@ -75,7 +91,8 @@ def save_job_sites() :
 
 @app.route("/save/edu/course/providers", methods = ["POST"])
 def save_edu_course_providers() :
-    return jsonify(saveEducationCourseProviders(request.json))
+    render_template("index.html", msg=saveEducationCourseProviders(request.form.to_dict()))
+    # return jsonify(saveEducationCourseProviders(request.json))
 
 @app.route("/save/online/learning/resources", methods = ["POST"])
 def save_online_learn_resources() :
@@ -95,7 +112,7 @@ def save_training() :
 
 @app.route("/save/accredited", methods = ["POST"])
 def save_accredited() :
-    return jsonify(saveAccredited(request.json))
+    return render_template("index.html", msg=saveAccredited(request.form.to_dict()))
 
 @app.route("/save/nonAccredited", methods = ["POST"])
 def save_non_accredited() :
@@ -106,7 +123,7 @@ def save_non_accredited() :
 ##### START :: GET operations ######
 @app.route("/fetch/jobSites", methods = ["GET"])
 def fetch_job_sites() :
-    return render_template("fetchDisplayPage.html", msg=fetchJobsSite(request.args.to_dict()))
+    return render_template("jobsSiteDisplayPage.html", msg=fetchJobsSite(request.args.to_dict()))
 
 @app.route("/fetch/edu/course/providers", methods = ["GET"])
 def fetch_edu_course_providers() :
@@ -130,7 +147,7 @@ def fetch_training() :
 
 @app.route("/fetch/accredited", methods = ["GET"])
 def fetch_accredited() :
-    return fetchAccredited(request.args.to_dict())
+    return render_template("accreditedDisplayPage.html", msg=fetchAccredited(request.args.to_dict()))
 
 @app.route("/fetch/nonAccredited", methods = ["GET"])
 def fetch_non_accredited() :
@@ -163,9 +180,10 @@ def delete_vacancies(id) :
 def delete_training(id) :
     return deleteTraining(id)
 
-@app.route("/delete/accredited/<id>", methods = ["DELETE"])
-def delete_accredited(id) :
-    return deleteAccredited(id)
+@app.route("/delete/accredited", methods = ["GET"])
+def delete_accredited() :
+    return render_template("index.html",msg=deleteAccredited(request.args.get("_id")))
+    # return deleteAccredited(id)
 
 @app.route("/delete/nonAccredited/<id>", methods = ["DELETE"])
 def delete_non_accredited(id) :
@@ -199,7 +217,7 @@ def update_training() :
 
 @app.route("/update/accredited", methods = ["POST"])
 def update_accredited() :
-    return updateAccredited(request.json)
+    return render_template("index.html",msg=updateAccredited(request.form.to_dict()))
 
 @app.route("/update/nonAccredited", methods = ["POST"])
 def update_non_accredited() :
