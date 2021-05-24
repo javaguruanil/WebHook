@@ -116,6 +116,23 @@ def eduCourseProvidersUpdatePage():
 def eduCourseProvidersDeletePage():
     return render_template("eduCourseProvidersDelete.html")
 
+######################## Online Learning Resources ######################################
+@app.route("/render/online/learning/resources/save")
+def onlineLearningResourcesSavePage():
+    return render_template("onlineLearningResourcesSave.html")
+
+@app.route("/render/online/learning/resources/fetch")
+def onlineLearningResourcesFetchPage():
+    return render_template("onlineLearningResourcesFetch.html")
+
+@app.route("/render/online/learning/resources/udpate")
+def onlineLearningResourcesUpdatePage():
+    return render_template("onlineLearningResourcesUpdate.html")
+
+@app.route("/render/online/learning/resources/delete")
+def onlineLearningResourcesDeletePage():
+    return render_template("onlineLearningResourcesDelete.html")
+
 ####################### START:: MONGODB CODE ############################################
 ###### START :: Save operations #######
 @app.route("/save/jobSites", methods = ["POST"])
@@ -128,7 +145,7 @@ def save_edu_course_providers() :
 
 @app.route("/save/online/learning/resources", methods = ["POST"])
 def save_online_learn_resources() :
-    return jsonify(saveOnlineLearnResources(request.json))
+    return render_template("index.html", msg=saveOnlineLearnResources(request.form.to_dict()))
 
 @app.route("/save/covid19/employment/pgm", methods = ["POST"])
 def save_covid19_employment_pgm() :
@@ -163,7 +180,7 @@ def fetch_edu_course_providers() :
 
 @app.route("/fetch/online/learning/resources", methods = ["GET"])
 def fetch_online_learning_resources() :
-    return fetchOnlineLearnResources(request.args.to_dict())
+    return render_template("onlineLearningResourcesDisplayPage.html", msg=fetchOnlineLearnResources(request.args.to_dict()))
 
 @app.route("/fetch/covid19/employment/pgm", methods = ["GET"])
 def fetch_covid19_employment_pgm() :
@@ -198,7 +215,7 @@ def delete_edu_course_providers() :
 
 @app.route("/delete/online/learning/resources", methods = ["GET"])
 def delete_online_learning_resources() :
-    return deleteOnlineLearnResources(id)
+    return render_template("index.html",msg=deleteOnlineLearnResources(request.args.get("_id")))
 
 @app.route("/delete/covid19/employment/pgm", methods = ["GET"])
 def delete_covid19_employment_pgm() :
@@ -232,7 +249,7 @@ def update_edu_course_providers() :
 
 @app.route("/update/online/learning/resources", methods = ["POST"])
 def update_online_learning_resources() :
-    return updateOnlineLearnResources(request.json)
+    return render_template("index.html",msg=updateOnlineLearnResources(request.form.to_dict()))
 
 @app.route("/update/covid19/employment/pgm", methods = ["POST"])
 def update_covid19_employment_pgm() :

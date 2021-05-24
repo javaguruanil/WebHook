@@ -3,7 +3,9 @@ from bson import ObjectId
 from WebHookApp.mongoDb import WebHookUtil
 from WebHookApp.mongoDb.MongoDBConnector import getConnection
 from WebHookApp.mongoDb.WebHookConstants import WebHookConstants
-from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDeleteJson, getUpdateJson
+from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDeleteJson, getUpdateJson, getDeleteMessage, \
+    getUpdateMessage
+from WebHookApp.response.OnlineLearnResourcesFetch import OnlineLearnResourcesFetch
 
 
 def getOnlineLearnResources(data):
@@ -20,11 +22,12 @@ def saveOnlineLearnResources(data):
     try:
         mongo = getConnection()
         # TODO - Need to set configurations for DEV, QA, PERF, ACCEPTANCE envs
-        mongo.webHook_DEV \
-             .ONLINE_LEARN_RESOURCES \
-             .insert_one(getOnlineLearnResources(data))
+        result = mongo.webHook_DEV \
+                      .ONLINE_LEARN_RESOURCES \
+                      .insert_one(getOnlineLearnResources(data))
         mongo.close()
-        result = WebHookConstants.ONLINE_LEARN_RESOURCES_DATA_CREATED.value
+        result = str(result.inserted_id)+WebHookConstants.HYPHEN.value\
+                 +WebHookConstants.ONLINE_LEARN_RESOURCES_DATA_CREATED.value
     except Exception as ex:
         print("Error occurred during the OnlineLearnResources insertion :: ", ex)
     return result
@@ -39,7 +42,12 @@ def fetchOnlineLearnResources(data):
         mongo.close()
     except Exception as ex:
         print("Error occurred during the OnlineLearnResources fetching :: ", ex)
-    return getJson(result)
+    if result is None:
+        return WebHookConstants.NO_RECORDS_FOUND.value
+    else:
+        resp = getJson(result)
+        resp[WebHookConstants.ID.value] = resp[WebHookConstants.ID.value][WebHookConstants.OBJECT_ID.value]
+        return OnlineLearnResourcesFetch(**resp)
 
 def deleteOnlineLearnResources(id):
     result = None
@@ -56,13 +64,11 @@ def deleteOnlineLearnResources(id):
         mongo.close()
     except Exception as ex:
         print("Error occurred during the OnlineLearnResources deleting :: ", ex)
-    return getDeleteJson(result)
-
+    return getDeleteMessage(result)
 
 def updateOnlineLearnResources(data):
     result = None
-    queryFilter = {WebHookConstants.ID.value:
-                   ObjectId(data[WebHookConstants.ID.value][WebHookConstants.OBJECT_ID.value])}
+    queryFilter = {WebHookConstants.ID.value: ObjectId(data[WebHookConstants.ID.value])}
     data[WebHookConstants.UPDATE_DATE.value] = getCurrentDateTime()
     del data[WebHookConstants.ID.value]
     updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value: data}
@@ -74,4 +80,4 @@ def updateOnlineLearnResources(data):
         mongo.close()
     except Exception as ex:
         print("Error occurred during the OnlineLearnResources updating :: ", ex)
-    return getUpdateJson(result, WebHookConstants.NO_RECORDS_UPDATED.value)
+    return getUpdateMessage(result, WebHookConstants.NO_RECORDS_UPDATED.value)

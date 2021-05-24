@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="http://localhost:5000/save/online/learning/resources" method = "POST">
+  Skill Types : <input type = text name="skill_types"> <br>
+  Corresponding Online Links: <input type = text name="corresponding_online_links"> <br>
+  <input type = "submit" value = "SAVE"/>
+</form>
+<a href="{{ url_for('index') }}">Click for Index</a>
+</body>
+</html>
