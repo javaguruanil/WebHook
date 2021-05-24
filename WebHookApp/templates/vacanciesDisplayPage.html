@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{{msg}}<br>
+ID: <input type="text" value="{{msg._id}}">  <br>
+Skill Type : <input type = text value="{{msg.skill_type}}"> <br>
+Career Options For Skills : <input type = text value="{{msg.career_options_for_skills}}"> <br>
+Further Info : <input type = text value="{{msg.further_info}}"> <br>
+<a href="{{ url_for('index') }}">Click for Index</a>
+</body>
+</html>

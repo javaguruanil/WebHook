@@ -3,7 +3,9 @@ from bson import ObjectId
 from WebHookApp.mongoDb import WebHookUtil
 from WebHookApp.mongoDb.MongoDBConnector import getConnection
 from WebHookApp.mongoDb.WebHookConstants import WebHookConstants
-from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDeleteJson, getUpdateJson
+from WebHookApp.mongoDb.WebHookUtil import getCurrentDateTime, getJson, getDeleteJson, getUpdateJson, getDeleteMessage, \
+    getUpdateMessage
+from WebHookApp.response.VacanciesFetch import VacanciesFetch
 
 
 def getVacanciesJson(data):
@@ -21,11 +23,12 @@ def saveVacancies(data):
     try:
         mongo = getConnection()
         # TODO - Need to set configurations for DEV, QA, PERF, ACCEPTANCE envs
-        mongo.webHook_DEV \
-             .VACANCIES \
-             .insert_one(getVacanciesJson(data))
+        result = mongo.webHook_DEV \
+                      .VACANCIES \
+                      .insert_one(getVacanciesJson(data))
         mongo.close()
-        result = WebHookConstants.VACANCIES_DATA_CREATED.value
+        result = str(result.inserted_id)+WebHookConstants.HYPHEN.value\
+                 +WebHookConstants.VACANCIES_DATA_CREATED.value
     except Exception as ex:
         print("Error occurred during the Vacancies insertion :: ", ex)
     return result
@@ -40,7 +43,12 @@ def fetchVacancies(data):
         mongo.close()
     except Exception as ex:
         print("Error occurred during the Vacancies fetching :: ", ex)
-    return getJson(result)
+    if result is None:
+        return WebHookConstants.NO_RECORDS_FOUND.value
+    else:
+        resp = getJson(result)
+        resp[WebHookConstants.ID.value] = resp[WebHookConstants.ID.value][WebHookConstants.OBJECT_ID.value]
+        return VacanciesFetch(**resp)
 
 def deleteVacancies(id):
     result = None
@@ -57,12 +65,11 @@ def deleteVacancies(id):
         mongo.close()
     except Exception as ex:
         print("Error occurred during the Vacancies deleting :: ", ex)
-    return getDeleteJson(result)
+    return getDeleteMessage(result)
 
 def updateVacancies(data):
     result = None
-    queryFilter = {WebHookConstants.ID.value:
-                   ObjectId(data[WebHookConstants.ID.value][WebHookConstants.OBJECT_ID.value])}
+    queryFilter = {WebHookConstants.ID.value: ObjectId(data[WebHookConstants.ID.value])}
     data[WebHookConstants.UPDATE_DATE.value] = getCurrentDateTime()
     del data[WebHookConstants.ID.value]
     updatingValue = {WebHookConstants.UPDATE_EXPRESSION.value: data}
@@ -74,5 +81,5 @@ def updateVacancies(data):
         mongo.close()
     except Exception as ex:
         print("Error occurred during the Vacancies updating :: ", ex)
-    return getUpdateJson(result, WebHookConstants.NO_RECORDS_UPDATED.value)
+    return getUpdateMessage(result, WebHookConstants.NO_RECORDS_UPDATED.value)
 

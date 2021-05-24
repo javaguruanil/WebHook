@@ -133,6 +133,40 @@ def onlineLearningResourcesUpdatePage():
 def onlineLearningResourcesDeletePage():
     return render_template("onlineLearningResourcesDelete.html")
 
+######################## Covid19 Employment Pgm ######################################
+@app.route("/render/covid19/employment/pgm/save")
+def covid19EmploymentPgmSavePage():
+    return render_template("covid19EmploymentPgmSave.html")
+
+@app.route("/render/covid19/employment/pgm/fetch")
+def covid19EmploymentPgmFetchPage():
+    return render_template("covid19EmploymentPgmFetch.html")
+
+@app.route("/render/covid19/employment/pgm/udpate")
+def covid19EmploymentPgmUpdatePage():
+    return render_template("covid19EmploymentPgmUpdate.html")
+
+@app.route("/render/covid19/employment/pgm/delete")
+def covid19EmploymentPgmDeletePage():
+    return render_template("covid19EmploymentPgmDelete.html")
+
+######################## Vacancies ######################################
+@app.route("/render/vacancies/save")
+def vacanciesSavePage():
+    return render_template("vacanciesSave.html")
+
+@app.route("/render/vacancies/fetch")
+def vacanciesFetchPage():
+    return render_template("vacanciesFetch.html")
+
+@app.route("/render/vacancies/udpate")
+def vacanciesUpdatePage():
+    return render_template("vacanciesUpdate.html")
+
+@app.route("/render/vacancies/delete")
+def vacanciesDeletePage():
+    return render_template("vacanciesDelete.html")
+
 ####################### START:: MONGODB CODE ############################################
 ###### START :: Save operations #######
 @app.route("/save/jobSites", methods = ["POST"])
@@ -149,11 +183,11 @@ def save_online_learn_resources() :
 
 @app.route("/save/covid19/employment/pgm", methods = ["POST"])
 def save_covid19_employment_pgm() :
-    return jsonify(saveCovid19EmploymentPgm(request.json))
+    return render_template("index.html", msg=saveCovid19EmploymentPgm(request.form.to_dict()))
 
 @app.route("/save/vacancies", methods = ["POST"])
 def save_vacancies() :
-    return jsonify(saveVacancies(request.json));
+    return render_template("index.html", msg=saveVacancies(request.form.to_dict()))
 
 @app.route("/save/training", methods = ["POST"])
 def save_training() :
@@ -184,11 +218,11 @@ def fetch_online_learning_resources() :
 
 @app.route("/fetch/covid19/employment/pgm", methods = ["GET"])
 def fetch_covid19_employment_pgm() :
-    return fetchCovid19EmploymentPgm(request.args.to_dict())
+    return render_template("covid19EmploymentPgmDisplayPage.html", msg=fetchCovid19EmploymentPgm(request.args.to_dict()))
 
 @app.route("/fetch/vacancies", methods = ["GET"])
 def fetch_vacancies() :
-    return fetchVacancies(request.args.to_dict())
+    return render_template("vacanciesDisplayPage.html", msg=fetchVacancies(request.args.to_dict()))
 
 @app.route("/fetch/training", methods = ["GET"])
 def fetch_training() :
@@ -219,11 +253,11 @@ def delete_online_learning_resources() :
 
 @app.route("/delete/covid19/employment/pgm", methods = ["GET"])
 def delete_covid19_employment_pgm() :
-    return deleteCovid19EmploymentPgm(id)
+    return render_template("index.html",msg=deleteCovid19EmploymentPgm(request.args.get("_id")))
 
 @app.route("/delete/vacancies", methods = ["GET"])
 def delete_vacancies() :
-    return deleteVacancies(id)
+    return render_template("index.html",msg=deleteVacancies(request.args.get("_id")))
 
 @app.route("/delete/training", methods = ["GET"])
 def delete_training() :
@@ -253,11 +287,11 @@ def update_online_learning_resources() :
 
 @app.route("/update/covid19/employment/pgm", methods = ["POST"])
 def update_covid19_employment_pgm() :
-    return updateCovid19EmploymentPgm(request.json)
+    return render_template("index.html",msg=updateCovid19EmploymentPgm(request.form.to_dict()))
 
 @app.route("/update/vacancies", methods = ["POST"])
 def update_vacancies() :
-    return updateVacancies(request.json)
+    return render_template("index.html",msg=updateVacancies(request.form.to_dict()))
 
 @app.route("/update/training", methods = ["POST"])
 def update_training() :
