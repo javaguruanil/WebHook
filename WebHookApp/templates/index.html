@@ -7,9 +7,9 @@
 <br>
 <table border = 1>
     <tr>
-        <th>JobsSite</th>
-    </tr>
-    <tr>
+        <td>
+            JobsSite
+        </td>
         <td>
             <form action="http://localhost:5000/render/jobsSite/save" method = "GET">
                 <input type = "submit" value = "SAVE"/>
@@ -32,9 +32,9 @@
         </td>
     </tr>
     <tr>
-        <th>Accredited</th>
-    </tr>
-    <tr>
+        <td>
+            Accredited
+        </td>
         <td>
             <form action="http://localhost:5000/render/accredited/save" method = "GET">
                 <input type = "submit" value = "SAVE"/>
@@ -56,6 +56,57 @@
             </form>
         </td>
     </tr>
+    <tr>
+        <td>
+            NonAccredited
+        </td>
+        <td>
+            <form action="http://localhost:5000/render/nonAccredited/save" method = "GET">
+                <input type = "submit" value = "SAVE"/>
+            </form>
+        </td>
+        <td>
+            <form action="http://localhost:5000/render/nonAccredited/fetch" method = "GET">
+                <input type = "submit" value = "FETCH"/>
+            </form>
+        </td>
+        <td>
+            <form action="http://localhost:5000/render/nonAccredited/udpate" method = "GET">
+                <input type = "submit" value = "UPDATE"/>
+            </form>
+        </td>
+        <td>
+            <form action="http://localhost:5000/render/nonAccredited/delete" method = "GET">
+                <input type = "submit" value = "DELETE"/>
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            EducationCourseProviders
+        </td>
+        <td>
+            <form action="http://localhost:5000/render/edu/course/providers/save" method = "GET">
+                <input type = "submit" value = "SAVE"/>
+            </form>
+        </td>
+        <td>
+            <form action="http://localhost:5000/render/edu/course/providers/fetch" method = "GET">
+                <input type = "submit" value = "FETCH"/>
+            </form>
+        </td>
+        <td>
+            <form action="http://localhost:5000/render/edu/course/providers/udpate" method = "GET">
+                <input type = "submit" value = "UPDATE"/>
+            </form>
+        </td>
+        <td>
+            <form action="http://localhost:5000/render/edu/course/providers/delete" method = "GET">
+                <input type = "submit" value = "DELETE"/>
+            </form>
+        </td>
+    </tr>
+
 </table>
 </body>
 <head>

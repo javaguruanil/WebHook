@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{{msg}}<br>
+ID: <input type="text" value="{{msg._id}}">  <br>
+Courses : <input type="text" value="{{msg.courses}}"> <br>
+ProviderAddress: <input type="text" value="{{msg.provider_address}}"> <br>
+ScheduleCost: <input type="text" value="{{msg.schedule_cost}}"> <br>
+FurtherInfo: <input type="text" value="{{msg.further_info}}"> <br>
+<a href="{{ url_for('index') }}">Click for Index</a>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="http://localhost:5000/update/nonAccredited" method = "POST">
+  ID: <input type = text name="_id"> <br>
+  Borough: <input type = text name="borough"> <br>
+  Subject: <input type = text name="subject"> <br>
+  PossibleOptions: <input type = text name="possible_options"> <br>
+  WhereToFindMore: <input type = text name="where_to_find_more"> <br>
+  <input type = "submit" value = "UPDATE"/>
+</form>
+<a href="{{ url_for('index') }}">Click for Index</a>
+</body>
+</html>

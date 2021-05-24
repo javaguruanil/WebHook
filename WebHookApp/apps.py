@@ -82,6 +82,39 @@ def accreditedUpdatePage():
 @app.route("/render/accredited/delete")
 def accreditedDeletePage():
     return render_template("accreditedDelete.html")
+######################## Non Accredited ######################################
+@app.route("/render/nonAccredited/save")
+def nonAccreditedSavePage():
+    return render_template("nonAccreditedSave.html")
+
+@app.route("/render/nonAccredited/fetch")
+def nonAccreditedFetchPage():
+    return render_template("nonAccreditedFetch.html")
+
+@app.route("/render/nonAccredited/udpate")
+def nonAccreditedUpdatePage():
+    return render_template("nonAccreditedUpdate.html")
+
+@app.route("/render/nonAccredited/delete")
+def nonAccreditedDeletePage():
+    return render_template("nonAccreditedDelete.html")
+
+######################## Education Course Providers ######################################
+@app.route("/render/edu/course/providers/save")
+def eduCourseProvidersSavePage():
+    return render_template("eduCourseProvidersSave.html")
+
+@app.route("/render/edu/course/providers/fetch")
+def eduCourseProvidersFetchPage():
+    return render_template("eduCourseProvidersFetch.html")
+
+@app.route("/render/edu/course/providers/udpate")
+def eduCourseProvidersUpdatePage():
+    return render_template("eduCourseProvidersUpdate.html")
+
+@app.route("/render/edu/course/providers/delete")
+def eduCourseProvidersDeletePage():
+    return render_template("eduCourseProvidersDelete.html")
 
 ####################### START:: MONGODB CODE ############################################
 ###### START :: Save operations #######
@@ -91,8 +124,7 @@ def save_job_sites() :
 
 @app.route("/save/edu/course/providers", methods = ["POST"])
 def save_edu_course_providers() :
-    render_template("index.html", msg=saveEducationCourseProviders(request.form.to_dict()))
-    # return jsonify(saveEducationCourseProviders(request.json))
+    return render_template("index.html", msg=saveEducationCourseProviders(request.form.to_dict()))
 
 @app.route("/save/online/learning/resources", methods = ["POST"])
 def save_online_learn_resources() :
@@ -116,7 +148,7 @@ def save_accredited() :
 
 @app.route("/save/nonAccredited", methods = ["POST"])
 def save_non_accredited() :
-    return jsonify(saveNonAccredited(request.json))
+    return render_template("index.html", msg=saveNonAccredited(request.form.to_dict()))
 
 ###### END :: Save operations #######
 
@@ -127,7 +159,7 @@ def fetch_job_sites() :
 
 @app.route("/fetch/edu/course/providers", methods = ["GET"])
 def fetch_edu_course_providers() :
-    return fetchEducationCourseProviders(request.args.to_dict())
+    return render_template("eduCourseProvidersDisplayPage.html", msg=fetchEducationCourseProviders(request.args.to_dict()))
 
 @app.route("/fetch/online/learning/resources", methods = ["GET"])
 def fetch_online_learning_resources() :
@@ -151,7 +183,7 @@ def fetch_accredited() :
 
 @app.route("/fetch/nonAccredited", methods = ["GET"])
 def fetch_non_accredited() :
-    return fetchNonAccredited(request.args.to_dict())
+    return render_template("nonAccreditedDisplayPage.html", msg=fetchNonAccredited(request.args.to_dict()))
 ##### END :: GET operations ######
 
 
@@ -160,34 +192,33 @@ def fetch_non_accredited() :
 def delete_job_sites() :
     return render_template("index.html",msg=deleteJobsSite(request.args.get("_id")))
 
-@app.route("/delete/edu/course/providers/<id>", methods = ["DELETE"])
-def delete_edu_course_providers(id) :
-    return deleteEducationCourseProviders(id)
+@app.route("/delete/edu/course/providers", methods = ["GET"])
+def delete_edu_course_providers() :
+    return render_template("index.html",msg=deleteEducationCourseProviders(request.args.get("_id")))
 
-@app.route("/delete/online/learning/resources/<id>", methods = ["DELETE"])
-def delete_online_learning_resources(id) :
+@app.route("/delete/online/learning/resources", methods = ["GET"])
+def delete_online_learning_resources() :
     return deleteOnlineLearnResources(id)
 
-@app.route("/delete/covid19/employment/pgm/<id>", methods = ["DELETE"])
-def delete_covid19_employment_pgm(id) :
+@app.route("/delete/covid19/employment/pgm", methods = ["GET"])
+def delete_covid19_employment_pgm() :
     return deleteCovid19EmploymentPgm(id)
 
-@app.route("/delete/vacancies/<id>", methods = ["DELETE"])
-def delete_vacancies(id) :
+@app.route("/delete/vacancies", methods = ["GET"])
+def delete_vacancies() :
     return deleteVacancies(id)
 
-@app.route("/delete/training/<id>", methods = ["DELETE"])
-def delete_training(id) :
+@app.route("/delete/training", methods = ["GET"])
+def delete_training() :
     return deleteTraining(id)
 
 @app.route("/delete/accredited", methods = ["GET"])
 def delete_accredited() :
     return render_template("index.html",msg=deleteAccredited(request.args.get("_id")))
-    # return deleteAccredited(id)
 
-@app.route("/delete/nonAccredited/<id>", methods = ["DELETE"])
-def delete_non_accredited(id) :
-    return deleteNonAccredited(id)
+@app.route("/delete/nonAccredited", methods = ["GET"])
+def delete_non_accredited() :
+    return render_template("index.html",msg=deleteNonAccredited(request.args.get("_id")))
 ##### END :: SOFT DELETE operations ######
 
 ##### START :: UPDATE operations ######
@@ -197,7 +228,7 @@ def update_job_sites() :
 
 @app.route("/update/edu/course/providers", methods = ["POST"])
 def update_edu_course_providers() :
-    return updateEducationCourseProviders(request.json)
+    return render_template("index.html",msg=updateEducationCourseProviders(request.form.to_dict()))
 
 @app.route("/update/online/learning/resources", methods = ["POST"])
 def update_online_learning_resources() :
@@ -221,7 +252,7 @@ def update_accredited() :
 
 @app.route("/update/nonAccredited", methods = ["POST"])
 def update_non_accredited() :
-    return updateNonAccredited(request.json)
+    return render_template("index.html",msg=updateNonAccredited(request.form.to_dict()))
 ##### END :: UPDATE operations ######
 
 ########################## END:: MONGODB CODE #########################################
